@@ -1,0 +1,74 @@
+classDiagram
+    JobAnnouncer --> UI: 1. selectMenu("ยังไม่มีบริษัท")
+    JobAnnouncer --> UI: 2. submitCompanyForm(companyData)
+    UI --> CompanyController: 3. validateAndProcessCompany(companyData)
+    CompanyController --> CompanyController: 4. validateCompanyData(companyData)
+    CompanyController --> CompanyRepository: 5. checkDuplicateTextID(taxID)
+    CompanyRepository --> DBConnector: 6. execute(Q2.2AJ.1, taxID)
+    DBConnector --> CompanyRepository: 7. return queryResult
+    CompanyRepository --> CompanyController: 8. return isDuplicate
+    CompanyController --> UI: 9. showSummaryPage(companyData)
+
+    JobAnnouncer --> UI: 10. clickEdit("ข้อมูลส่วนตัว")
+    UI --> CompanyController: 11. redirectToPersonalEdit()
+    CompanyController --> UI: 12. showPersonalEditForm()
+
+    JobAnnouncer --> UI: 13. submitUpdatedPersonalInfo(data)
+    UI --> CompanyController: 14. updatePersonalInfo(data)
+    CompanyController --> CompanyRepository: 15. savePersonalChanges(data)
+    CompanyRepository --> DBConnector: 16. execute(Q2.2AJ.2, data)
+    DBConnector --> CompanyRepository: 17. return updateResult
+    CompanyRepository --> CompanyController: 18. saveStatus()
+    CompanyController --> UI: 19. redirectToSummaryPage()
+
+    JobAnnouncer --> UI: 20. clickEdit("ข้อมูลหน่วยงาน")
+    UI --> CompanyController: 21. redirectToCompanyEdit()
+    CompanyController --> UI: 22. showCompanyEditForm()
+
+    JobAnnouncer --> UI: 23. submitUpdatedCompanyInfo(data)
+    UI --> CompanyController: 24. updateCompanyInfo(data)
+    CompanyController --> CompanyRepository: 25. saveCompanyChanges(data)
+    CompanyRepository --> DBConnector: 26. execute(Q2.2AJ.3, data)
+    DBConnector --> CompanyRepository: 27. return updateResult
+    CompanyRepository --> CompanyController: 28. saveStatus()
+    CompanyController --> UI: 29. redirectToSummaryPage()
+
+    JobAnnouncer --> UI: 30. clickCreateAccount()
+    UI --> CompanyController: 31. finalizeRegistration()
+    CompanyController --> UI: 32. showPendingApprovalMessage()
+    CompanyController --> UI: 33. redirectToVerification()
+
+    class JobAnnouncer {
+    }
+
+    class UI {
+        +selectMenu()
+        +submitCompanyForm()
+        +clickEdit()
+        +submitUpdatedPersonalInfo()
+        +submitUpdatedCompanyInfo()
+        +clickCreateAccount()
+        +showSummaryPage()
+        +showPersonalEditForm()
+        +redirectToSummaryPage()
+        +showCompanyEdit()
+        +redirectToSummaryPage()
+        +showPendingApprovalMessage()
+        +showValidationErrors()
+    }
+
+    class CompanyController {
+        +validateAndProcessCompany()
+        +validateCompanyData()
+        +saveStatus()
+    }
+
+    class CompanyRepository {
+        +checkDuplicateTextID()
+        +savePersonalChanges()
+        +saveCompanyChanges()
+    }
+
+    class DBConnector {
+        +executeQuery()
+    }

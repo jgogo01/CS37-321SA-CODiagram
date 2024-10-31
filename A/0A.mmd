@@ -1,0 +1,50 @@
+classDiagram
+KUSD --> UI: 1. clickKUAllLogin()
+UI --> KUAllLogin: 2. redirectToSSO()
+KUAllLogin --> LDAP: 3. authenticateUser()
+LDAP --> KUAllLogin: 4. return userAttributes
+KUAllLogin --> UI: 5. return userData
+UI --> AuthController: 6. validateKUSDStaff()
+AuthController --> UI: 7. return isValidStaff
+UI --> AuthController: 8. procressLogin(userData)
+AuthController --> UserRepository: 9. checkUserExists(username)
+UserRepository --> DBConnector: 10. executeQuery(Q0A.1, username)
+DBConnector --> UserRepository: 11. return exists
+UserRepository --> AuthController: 12. return userExists
+AuthController --> UserRepository: 13. createNewUser(userData)
+UserRepository --> DBConnector: 14. executeQuery(Q0A.2, userData)
+DBConnector --> UserRepository: 15. return success
+UserRepository --> AuthController: 16. return userCreated
+AuthController --> JWTService: 17. generateToken(userData)
+JWTService --> AuthController: 18. return JWTToken
+AuthController --> UI: 19. return loginSuccess
+UI --> UI: 20. redirectToHomePage()
+
+    class KUSD {
+    }
+
+    class UI{
+        +clickKUAllLogin()
+        +redirectToHomePage()
+    }
+
+    class KUAllLogin{
+        +authenticateUser()
+    }
+
+    class LDAP{
+        +authenticateUser()
+    }
+
+    class AuthController{
+    }
+
+    class UserRepository{
+        +checkUserExists()
+        +createNewUser()
+        +generateToken()
+    }
+
+    class DBConnector{
+        +executeQuery()
+    }

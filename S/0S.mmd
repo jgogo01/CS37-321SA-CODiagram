@@ -1,0 +1,52 @@
+classDiagram
+Student --> UI: 1. clickKUAllLogin()
+UI --> KUAllLogin: 2. redirectToKUAllLogin()
+KUAllLogin --> AuthController: 3. handleKUAllLogin()
+AuthController --> AuthController: 4. validateCurrentStudent(userinfo)
+AuthController --> AuthRepository: 5. checkExistingStudent(username)
+AuthRepository --> DBConnector: 6. execute(Q1S.1, username)
+DBConnector --> AuthRepository: 7. queryResult()
+AuthRepository --> AuthController: 8. userExist(boolean)
+AuthController --> AuthRepository: 9. createNewStudent(userinfo)
+AuthRepository --> DBConnector: 10. execute(Q1S.2_USER, userinfo)
+DBConnector --> AuthRepository: 11. userCreated()
+AuthRepository --> DBConnector: 12. execute(Q1S.2_STUDENT, userinfo)
+DBConnector --> AuthRepository: 13. studentCreated()
+AuthRepository --> AuthController: 14. userCreationComplete()
+AuthController --> AuthController: 15. returnJWTToken(token)
+AuthController --> AuthController: 16. navigateToMainPage()
+AuthController --> Student: 17. navigateToMainPage()
+
+    class Student {
+        +clickKUAllLogin()
+        +navigateToMainPage()
+    }
+
+    class UI {
+        +returnJWTToken()
+        +navigateToMainPage()
+    }
+
+    class AuthController {
+        +validateCurrentStudent()
+        +handleKUAllLogin()
+        +userExist()
+        +userCreationComplete()
+        +generateJWTToken()
+
+    }
+
+    class AuthRepository {
+        +checkExistingStudent()
+        +createNewStudent()
+        +queryResult()
+        +userCreated()
+        +studentCreated()
+    }
+
+    class DBConnector {
+        +executeQuery()
+    }
+
+    class KUAllLogin{
+    }

@@ -1,0 +1,78 @@
+classDiagram
+    JobAnnouncer --> UI: 1. clickMyAnnouncements()
+    UI --> JobAnnouncementController: 2. checkPendingSelections()
+    JobAnnouncementController --> JobAnnouncementRepository: 3. checkPendingSelections()
+    JobAnnouncementRepository --> DBConnector: 4. execute(Q5J.1)
+    DBConnector --> JobAnnouncementRepository: 5. return hasPendingSelections
+    JobAnnouncementRepository --> JobAnnouncementController: 6. return hasPendingSelections
+    JobAnnouncementController --> UI: 7.1. return error
+    UI --> UI: 7.2. displayErrorPopup()
+    JobAnnouncer --> UI: 8.1. return success
+    UI --> UI: 8.2. showCreateAnnouncementForm()
+    JobAnnouncer --> UI: 9. addPosition()
+    UI --> UI: 10. createPositionForm()
+
+    JobAnnouncer --> UI: 11. submitAnnouncement(formData)
+    UI --> Validator: 12. validateAnnouncement(formData)
+    Validator --> UI: 13.1. return validationError
+    UI --> UI: 13.2. displayErrorMessages()
+    Validator --> UI: 14.1. return validationSuccess
+    UI --> UI: 14.2. displayConfimationDialog()
+    
+    JobAnnouncer --> UI: 15. confirmCreate()
+    UI --> JobAnnouncementController: 16. createAnnouncement(validatedData)
+    JobAnnouncementController --> JobAnnouncementRepository: 17. saveAnnouncement(announcementData)
+    JobAnnouncementRepository --> DBConnector: 18. execute(Q5J.2, announcementData)
+    DBConnector --> JobAnnouncementRepository: 19. return announcementId
+    JobAnnouncementRepository --> JobAnnouncementController: 20. return announcementId
+    JobAnnouncementController --> PositionRepository: 21. savePositions(positionData, announcementId)
+    PositionRepository --> DBConnector: 22. execute(Q5J.3, positionData, announcementId)
+    DBConnector --> PositionRepository: 23. return success
+    PositionRepository --> JobAnnouncementController: 24. return success
+    JobAnnouncementController --> UI: 25. success
+    UI --> UI: 26. displaySuccessMessage()
+    UI --> UI: 27. navigateToAnnouncementList()
+
+    class JobAnnouncer {
+        +clickMyAnnouncements()
+        +addPosition()
+        +submitAnnouncement()
+        +confirmCreate()
+    }
+
+    class UI {
+        +clickMyAnnouncements()
+        +addPosition()
+        +submitAnnouncement()
+        +confirmCreate()
+        +displayErrorMessages()
+        +showCreateAnnouncementForm()
+        +createPositionForm()
+        +displayValidationErrors()
+        +displayConfimationDialog()
+        +displaySuccessMessage()
+        +navigateToAnnouncementList()
+        +displayErrorPopup()
+    }
+
+    class JobAnnouncementController {
+        +checkPendingSelections()
+        +createAnnouncement()
+    }
+
+    class Validator {
+        +validateAnnouncement()
+    }
+
+    class JobAnnouncementRepository {
+        +checkPendingSelections()
+        +saveAnnouncement()
+    }
+
+    class PositionRepository {
+        +savePositions()
+    }
+
+    class DBConnector {
+        +execute()
+    }

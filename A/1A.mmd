@@ -1,0 +1,55 @@
+classDiagram
+KUSD --> UI : 1. login()
+UI --> ApprovalController : 2. redirectToApprovalPage()
+ApprovalController --> UI : 3. showApprovalListPage()
+
+KUSD --> UI : 4. selectCompanyApproval()
+UI --> ApprovalController : 5. initializeApprovalList()
+UI --> CompanyRepository : 6. getCompaniesForApproval()
+CompanyRepository --> DBConnector : 7. executeQuery(Q1A.1)
+DBConnector --> CompanyRepository : 8. return pendingCompanies
+CompanyRepository --> UI : 9. return companiesList
+ApprovalController --> UI : 10. displayCompaniesList()
+
+KUSD --> UI : 11. clickViewDetails(company)
+UI --> ApprovalController : 12. getCompanyDetails(taxID)
+ApprovalController --> CompanyRepository : 13. findCompanyByTaxID(taxID)
+CompanyRepository --> DBConnector : 14. executeQuery(Q1A.2, taxID)
+
+
+    class KUSD {
+
+    }
+
+    class UI{
+        +login()
+        +clickApprovalMenu()
+        +selectUsers()
+        +clickApprove()
+        +clickReject()
+        +displayPendingApprovalsList()
+        +updateSelectedList()
+        +displayApprovalSuccess()
+        +displayRejectSuccess()
+    }
+
+    class ApprovalController{
+        +navigateToApprovalPage()
+        +getPendingApprovals()
+        +addToApprovalList()
+        +approveUsers()
+        +rejectUsers()
+    }
+
+    class UserRepository{
+        +approveUsers()
+        +deactivateUsers()
+    }
+
+    class CompanyRepository{
+        +getPendingCompaniesWithUsers()
+    }
+
+    class DBConnector{
+        +executeQuery()
+    }

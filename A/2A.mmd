@@ -1,0 +1,65 @@
+classDiagram
+KUSD --> UI : 1. login()
+UI --> ApprovalController : 2. navigateToApprovalPage()
+ApprovalController --> UI : 3. redirect to ApprovalPage
+KUSD --> UI : 4. clickApprovalMenu()
+UI --> ApprovalController : 5. getPendingApprovals()
+ApprovalController --> CompanyRepository : 6. getPendingCompaniesWithUsers()
+CompanyRepository --> DBConnector : 7. executeQuery(Q2.1A)
+DBConnector --> CompanyRepository : 8. return pendingUsers
+CompanyRepository --> ApprovalController : 9. return companiesWithPendingUsers
+ApprovalController --> UI : 10. displayPendingApprovalsList()
+KUSD --> UI : 11. selectUsers(checkboxes)
+UI --> ApprovalController : 12. addToApprovalList(selectedUsers)
+ApprovalController --> UI : 13. updateSelectedUsersList()
+KUSD --> UI : 14. clickApprove()
+UI --> ApprovalController : 15. approveUsers(usernameList)
+ApprovalController --> UserRepository : 16. approveUsers(usernameList)
+UserRepository --> DBConnector : 17. executeQuery(Q2A.3, usernameList)
+DBConnector --> UserRepository : 18. return success
+UserRepository --> ApprovalController : 19. return approvalStatus
+ApprovalController --> UI : 20. displayApprovalSuccess()
+KUSD --> UI : 21. clickReject()
+UI --> ApprovalController : 22. rejectUsers(usernameList)
+ApprovalController --> UserRepository : 23. deactivateUsers(usernameList)
+UserRepository --> DBConnector : 24. executeQuery(Q2A.4, usernameList)
+DBConnector --> UserRepository : 25. return success
+UserRepository --> ApprovalController : 26. return rejectStatus
+ApprovalController --> UI : 27. displayRejectSuccess()
+
+    class KUSD {
+
+    }
+
+    class UI{
+        +login()
+        +clickApprovalMenu()
+        +selectUsers()
+        +clickApprove()
+        +clickReject()
+        +displayPendingApprovalsList()
+        +updateSelectedList()
+        +displayApprovalSuccess()
+        +displayRejectSuccess()
+    }
+
+    class ApprovalController{
+        +navigateToApprovalPage()
+        +getPendingApprovals()
+        +addToApprovalList()
+        +approveUsers()
+        +rejectUsers()
+    }
+
+    class UserRepository{
+        +approveUsers()
+        +deactivateUsers()
+    }
+
+    class CompanyRepository{
+        +getPendingCompaniesWithUsers()
+    }
+
+    class DBConnector{
+        +executeQuery()
+    }

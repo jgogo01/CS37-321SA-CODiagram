@@ -1,0 +1,54 @@
+classDiagram
+    JobAnnouncer --> UI: 1. waitForApproval()
+    UI --> ApprovalController: 2. checkApprovalStatus()
+    ApprovalController --> ValidationService: 3. validateCompanyInfo()
+    ValidationService --> DBDAPI: 4. verifyTaxID
+    DBDAPI --> ValidationService: 5. return verification result
+    ValidationService --> CompanyRepository: 6. autoApproveCompany(taxID)
+    CompanyRepository --> DBConnector: 7. execute(Q3J.1, taxID)
+    DBConnector --> CompanyRepository: 8. return success
+    CompanyRepository --> ValidationService: 9. return companyActivated
+    ValidationService --> UserRepository: 10. activateUser(username)
+    UserRepository --> DBConnector: 11. execute(Q3J.2 Part 2, username)
+    DBConnector --> UserRepository: 12. return success
+    UserRepository --> ValidationService: 13. return userActivated
+    ValidationService --> ApprovalController: 14. forwardToStudentDivision()
+    ValidationService --> ValidationService: 15. checkTaxIDPrefix(taxID)
+    ValidationService --> CompanyRepository: 16. autoApproveCompany(taxID)
+    CompanyRepository --> DBConnector: 17. execute(Q3J.1 Part 1, taxID)
+    DBConnector --> CompanyRepository: 18. return success
+    CompanyRepository --> ValidationService: 19. return companyActivated
+    ValidationService --> CompanyRepository: 20. forwardToStudentDivision()
+    ValidationService --> CompanyRepository: 21. return validationResult
+    ApprovalController --> UI: 22. return approvalStatus
+
+    class JobAnnouncer {
+        +waitForApproval()
+    }
+
+    class UI {
+    }
+
+    class ApprovalController {
+        +forwardToStudentDivision()
+    }
+
+    class ValidationService {
+        +checkTaxIDPrefix()
+    }
+
+    class DBDAPI {
+        +verifyTaxID()
+    }
+
+    class UserRepository{
+        +activateUser()
+    }
+
+    class CompanyRepository {
+        +autoApproveCompany()
+    }
+
+    class DBConnector {
+        +executeQuery()
+    }

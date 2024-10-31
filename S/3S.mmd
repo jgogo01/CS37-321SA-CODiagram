@@ -1,0 +1,42 @@
+classDiagram
+Student --> UI: 1. accessMainPage()
+UI --> FilterController: 2. initializeFilters()
+FilterController --> TagRepository: 3. getAllTags()
+TagRepository --> DBConnector: 4. execute(Q3S.1)
+DBConnector --> TagRepository: 5. return tags
+TagRepository --> FilterController: 6. return tagList
+FilterController --> UI: 7. display filters and tags
+
+Student --> UI: 8. applyFilter()
+UI --> FilterController: 9. filterJobs(filterCriteria)
+FilterController --> JobRepository: 10. searchJobs(criteria)
+JobRepository --> DBConnector: 11. execute(Q3S.2, criteria)
+DBConnector --> JobRepository: 12. return filteredJobs
+JobRepository --> FilterController: 13. return jobList
+FilterController --> UI: 14. displayFilteredResults()
+
+    class Student {
+    }
+
+    class UI {
+        +accessMainPage()
+        +applyFilter()
+        +displayFilteredResults()
+    }
+
+    class FilterController {
+        +initializeFilters()
+        +filterJobs()
+    }
+
+    class JobRepository {
+        +searchJobs()
+    }
+
+    class TagRepository {
+        +getAllTags()
+    }
+
+    class DBConnector {
+        +execute()
+    }

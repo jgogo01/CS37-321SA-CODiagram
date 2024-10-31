@@ -1,0 +1,31 @@
+classDiagram
+    JobAnnouncer --> UI: 1. selectStudent()
+    JobAnnouncer --> UI: 2. clickResultButton(accept/reject)
+    UI --> ApplicationController: 3. showConfirmationDialog()
+    ApplicationController --> UI: 4. displayDialog()
+    JobAnnouncer --> UI: 5. clickConfirmButton()
+    UI --> ApplicationController: 6. processQualifcationResult(studentData)
+    ApplicationController --> StudentRepository: 7. insertQualificationResult(data)
+    StudentRepository --> DBConnector: 8. execute(Q7J.1, data)
+    DBConnector --> StudentRepository: 9. return success
+    StudentRepository --> ApplicationController: 10. return resultSaved
+    ApplicationController --> UI: 11. return success
+
+    class UI {
+        +selectStudent()
+        +clickResultButton()
+        +clickConfirmButton()
+    }
+
+    class ResultController {
+        +showConfirmationDialog()
+        +processQualifcationResult()
+    }
+
+    class StudentRepository {
+        +insertQualificationResult()
+    }
+
+    class DBConnector {
+        +executeQuery()
+    }

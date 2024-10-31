@@ -1,0 +1,72 @@
+classDiagram
+Student --> UI: 1. clickJobAnnouncement()
+UI --> JobController: 2. getJobDetails(search)
+JobController --> PositionRepository: 3. fetchJobDetails(search)
+PositionRepository --> DBConnector: 4. execute(Q4S.1, search)
+DBConnector --> PositionRepository: 5. return jobDetails
+PositionRepository --> JobController: 6. return jobDetails
+JobController --> UI: 7. displayJobDetails()
+
+Student --> UI: 8. clickSelect(positionId)
+UI --> SelectionList: 9. addPosition(positionId)
+SelectionList --> UI : 10. updateSelectionList()
+UI --> UI: 11. changeButtonToCancel()
+
+Student --> UI: 12. clickCancel(positionId)
+UI --> SelectionList: 13. removePosition(positionId)
+SelectionList --> UI : 14. updateSelectionList()
+UI --> UI: 15. changeButtonToSelect()
+UI --> UI: 16. checkSelectionList()
+UI --> UI: 17. enableApplyButton()
+UI --> UI: 18. disableApplyButton()
+
+Student --> UI: 19. clickApplyJob()
+UI --> UI : showConfirmationPopup()
+
+Student --> UI: 20. clickConfirm()
+UI --> JobController: 21. submitApplication(positions)
+JobController --> PositionRepository: 22. registerPositions(positions)
+PositionRepository --> DBConnector: 23. execute(Q4S.2, positions)
+DBConnector --> PositionRepository: 24. return success
+PositionRepository --> JobController: 25. return registered
+JobController --> UI: 26. showSuccessMessage()
+
+Student --> UI: 27. clickCancel()
+UI --> UI: 28. closeConfirmationPopup()
+
+    class Student{
+    }
+
+    class UI {
+        +clickJobAnnouncement()
+        +cllickSelect()
+        +clickCancel()
+        +clickApplyJob()
+        +clickConfirm()
+        +clickCancel()
+
+        +updateSelectionList()
+        +changeButtonToSelect()
+        +checkSelectionList()
+        +enableApplyButton()
+        +disableApplyButton()
+        +showConfirmationPopup()
+        showSuccessMessage()
+        +closeConfirmationPopup()
+    }
+
+    class JobController {
+
+    }
+
+    class PositionRepository {
+        +fetchJobDetails()
+        +registerPositions()
+    }
+
+    class SelectionList {
+    }
+
+    class DBConnector {
+        +execute()
+    }

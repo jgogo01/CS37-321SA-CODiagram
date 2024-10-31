@@ -1,0 +1,29 @@
+classDiagram
+    JobAnnouncer --> UI: 1. clickMyAnnouncements()
+    UI --> UI: 2. navigateToMyAnnounmentPage()
+    JobAnnouncer --> UI : 3. clickCreateAnnouncement()
+    UI --> JobAnnouncementController: 4. checkPendingSelections()
+    JobAnnouncementController --> DBConnector: execute(Q4J.1)
+    DBConnector --> JobAnnouncementController: return hasPendingSelections
+    JobAnnouncementController --> UI: 4. return pendingSelectionsExist
+    UI --> UI: 5. showPendingSelectionsPopup()
+    UI --> UI: 6. navigateToSelectionResultsPage()
+
+    class JobAnnouncer{
+        +clickMyAnnouncements()
+        +clickCreateAnnouncement()
+    }
+
+    class UI {
+        +navigateToMyAnnounmentPage()
+        +showPendingSelectionsPopup()
+        +navigateToSelectionResultsPage()
+    }
+
+    class JobAnnouncementController {
+        +checkPendingSelections()
+    }
+
+    class DBConnector {
+        +executeQuery()
+    }
