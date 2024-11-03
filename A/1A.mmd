@@ -14,42 +14,71 @@ ApprovalController --> UI : 10. displayCompaniesList()
 KUSD --> UI : 11. clickViewDetails(company)
 UI --> ApprovalController : 12. getCompanyDetails(taxID)
 ApprovalController --> CompanyRepository : 13. findCompanyByTaxID(taxID)
-CompanyRepository --> DBConnector : 14. executeQuery(Q1A.2, taxID)
+CompanyRepository --> DBConnector: 14. executeQuery(Q1A.1)
+DBConnector --> CompanyRepository: 15. return companyDetails
+CompanyRepository --> ApprovalController: 16. return companyDetails
+ApprovalController --> UI: 17. displayCompanyDetails()
 
+KUSD --> UI : 18. clickApprove(taxID, username)
+UI --> ApprovalController : 19. approveCompany(taxID, username)
+ApprovalController --> CompanyRepository : 20. approveCompany(taxID, true)
+CompanyRepository --> DBConnector : 21. executeQuery(Q1A.2 Part 1, taxID, username, true)
+DBConnector --> CompanyRepository : 22. return success
+CompanyRepository --> ApprovalController : 23. return updated
+ApprovalController --> UserRepository : 24. updateUserStatus(username, true)
+UserRepository --> DBConnector : 25. executeQuery(Q1A.2 Part 2, username, true)
+DBConnector --> UserRepository : 26. return success
+UserRepository --> ApprovalController : 27. return updated
+ApprovalController --> UI : 28. showApprovalSuccess()
+
+KUSD --> UI : 29. clickReject(taxID, username)
+UI --> ApprovalController : 30. rejectCompany(taxID, username)
+ApprovalController --> CompanyRepository : 31. updateCompanyStatus(taxID, false)
+CompanyRepository --> DBConnector : 32. executeQuery(Q1A.3 Part 1, taxID, username, false)
+DBConnector --> CompanyRepository : 33. return success
+CompanyRepository --> ApprovalController : 34. return updated
+ApprovalController --> UserRepository : 35. updateUserStatus(username, false)
+UserRepository --> DBConnector : 36. executeQuery(Q1A.3 Part 2, username, false)
+DBConnector --> UserRepository : 37. return success
+UserRepository --> ApprovalController : 38. return updated
+ApprovalController --> UI : 39. showRejectSuccess()
 
     class KUSD {
 
     }
 
-    class UI{
+    class UI {
         +login()
-        +clickApprovalMenu()
-        +selectUsers()
+        +redirectToApprovalPage()
+        +selectCompanyApproval()
+        +clickViewDetails()
         +clickApprove()
         +clickReject()
         +displayPendingApprovalsList()
-        +updateSelectedList()
+        +displayCompanyDetails()
         +displayApprovalSuccess()
         +displayRejectSuccess()
     }
 
-    class ApprovalController{
-        +navigateToApprovalPage()
-        +getPendingApprovals()
-        +addToApprovalList()
-        +approveUsers()
-        +rejectUsers()
+    class ApprovalController {
+        +redirectToApprovalPage()
+        +initializeApprovalList()
+        +getCompanyDetails()
+        +approveCompany()
+        +rejectCompany()
     }
 
-    class UserRepository{
-        +approveUsers()
-        +deactivateUsers()
+    class UserRepository {
+        +updateUserStatus()
     }
 
-    class CompanyRepository{
-        +getPendingCompaniesWithUsers()
+    class CompanyRepository {
+        +getCompaniesForApproval()
+        +findCompanyByTaxID()
+        +approveCompany()
+        +updateCompanyStatus()
     }
 
-    class DBConnector{
+    class DBConnector {
         +executeQuery()
     }
